@@ -9,6 +9,8 @@ TagManager:
   - Attacker
   - Goal
   - Floor
+  - Ball
+  - Obstacle
   layers:
   - Default
   - TransparentFX

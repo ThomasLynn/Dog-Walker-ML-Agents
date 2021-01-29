@@ -43,16 +43,24 @@ public class DogAgent : Unity.MLAgents.Agent
             float turnAmount = 0f;
             if (actionBuffers.DiscreteActions[i] == 1)
             {
-                turnAmount = 1f;
+                turnAmount = 0.5f;
             }
             else if (actionBuffers.DiscreteActions[i] == 2)
+            {
+                turnAmount = 1f;
+            }
+            else if (actionBuffers.DiscreteActions[i] == 3)
+            {
+                turnAmount = -0.5f;
+            }
+            else if (actionBuffers.DiscreteActions[i] == 4)
             {
                 turnAmount = -1f;
             }
 
             HingeJoint joint = LegParts[i].GetComponent<HingeJoint>();
             JointMotor motor = joint.motor;
-            motor.targetVelocity = turnAmount * 100f;
+            motor.targetVelocity = turnAmount * 200f;
             joint.motor = motor;
         }
         // Convert the second action to turning left or right
@@ -85,21 +93,35 @@ public class DogAgent : Unity.MLAgents.Agent
     {
         if (Input.GetKey(KeyCode.W))
         {
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 9; i++)
             {
                 actionsOut.DiscreteActions.Array[i] = 1;
             }
         }
-        else if (Input.GetKey(KeyCode.S))
+        else if (Input.GetKey(KeyCode.E))
         {
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 9; i++)
             {
                 actionsOut.DiscreteActions.Array[i] = 2;
             }
         }
+        else if (Input.GetKey(KeyCode.S))
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                actionsOut.DiscreteActions.Array[i] = 3;
+            }
+        }
+        else if (Input.GetKey(KeyCode.D))
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                actionsOut.DiscreteActions.Array[i] = 4;
+            }
+        }
         else
         {
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 9; i++)
             {
                 actionsOut.DiscreteActions.Array[i] = 0;
             }
