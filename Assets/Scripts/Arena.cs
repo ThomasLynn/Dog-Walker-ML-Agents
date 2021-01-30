@@ -6,17 +6,46 @@ public class Arena : MonoBehaviour
 {
     public GameObject dogPrefab;
 
-    public Transform obstacle;
-    public Transform obstacle2;
+    public int dogCount;
+
+    private int currentDogCount;
+
+    int layerMask;
+
+    public void Start()
+    {
+        currentDogCount = 0;
+        layerMask = 1 << 8;
+        layerMask = ~layerMask;
+        SpawnToNumber(dogCount);
+    }
 
     public void ResetEnv(GameObject ToDelete)
     {
         Destroy(ToDelete);
+        currentDogCount--;
+        SpawnToNumber(dogCount);
+    }
 
-        obstacle.localPosition = new Vector3(-5, 1, Random.Range(-3.5f, 3.5f));
-        obstacle2.localPosition = new Vector3(-2, 1, Random.Range(-3.5f, 3.5f));
-
-        GameObject go = (Instantiate(dogPrefab, transform.position + new Vector3(8,0, Random.Range(-3f, 3f)), Quaternion.identity) as GameObject);
-        go.transform.parent = transform;
+    private void SpawnToNumber(int number)
+    {
+        //Debug.Log(currentDogCount+" "+ number);
+        for (int j = currentDogCount; j < number; j++)
+        {
+            //Debug.Log("trying to spawn");
+            for (int i = 0; i < 50; i++)
+            {
+                //Debug.Log("finding spawn location");
+                Vector3 spawnPosition = transform.position + new Vector3(Random.Range(-9f, 9f), 1, Random.Range(-9f, 9f));
+                if (!Physics.CheckBox(spawnPosition, new Vector3(1f, 0.7f, 1f), Quaternion.identity, layerMask))
+                {
+                    GameObject go = Instantiate(dogPrefab, spawnPosition, Quaternion.identity) as GameObject;
+                    go.transform.parent = transform;
+                    currentDogCount++;
+                    break;
+                }
+            }
+        }
+        
     }
 }
