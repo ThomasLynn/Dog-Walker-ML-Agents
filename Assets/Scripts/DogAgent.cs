@@ -57,6 +57,7 @@ public class DogAgent : Unity.MLAgents.Agent
             {
                 turnAmount = -1f;
             }
+            //float turnAmount = Mathf.Clamp(actionBuffers.ContinuousActions[i], -1f, 1f);
 
             HingeJoint joint = LegParts[i].GetComponent<HingeJoint>();
             JointMotor motor = joint.motor;
@@ -96,6 +97,7 @@ public class DogAgent : Unity.MLAgents.Agent
             for (int i = 0; i < 9; i++)
             {
                 actionsOut.DiscreteActions.Array[i] = 1;
+                //actionsOut.ContinuousActions.Array[i] = 0.5f;
             }
         }
         else if (Input.GetKey(KeyCode.E))
@@ -103,6 +105,7 @@ public class DogAgent : Unity.MLAgents.Agent
             for (int i = 0; i < 9; i++)
             {
                 actionsOut.DiscreteActions.Array[i] = 2;
+                //actionsOut.ContinuousActions.Array[i] = 1.0f;
             }
         }
         else if (Input.GetKey(KeyCode.S))
@@ -110,6 +113,7 @@ public class DogAgent : Unity.MLAgents.Agent
             for (int i = 0; i < 9; i++)
             {
                 actionsOut.DiscreteActions.Array[i] = 3;
+                //actionsOut.ContinuousActions.Array[i] = -0.5f;
             }
         }
         else if (Input.GetKey(KeyCode.D))
@@ -117,6 +121,7 @@ public class DogAgent : Unity.MLAgents.Agent
             for (int i = 0; i < 9; i++)
             {
                 actionsOut.DiscreteActions.Array[i] = 4;
+                //actionsOut.ContinuousActions.Array[i] = -1.0f;
             }
         }
         else
@@ -124,6 +129,7 @@ public class DogAgent : Unity.MLAgents.Agent
             for (int i = 0; i < 9; i++)
             {
                 actionsOut.DiscreteActions.Array[i] = 0;
+                //actionsOut.ContinuousActions.Array[i] = 0f;
             }
         }
     }
