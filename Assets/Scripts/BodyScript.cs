@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,9 +15,10 @@ public class BodyScript : MonoBehaviour
         Reward = LocalReward;
     }
 
-    void OnTriggerStay(Collider other)
+    void OnCollisionStay(Collision collisionInfo)
     {
-        ParentAgent.AddReward(1f);
+        Debug.Log("colliding");
+        ParentAgent.AddReward(-1f);
         ParentAgent.EndEpisode();
         ParentAgent.GetParentArena().ResetEnv(ParentObject);
     }

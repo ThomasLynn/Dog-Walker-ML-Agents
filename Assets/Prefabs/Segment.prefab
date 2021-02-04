@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 7488943690772088292}
   m_Layer: 8
   m_Name: Segment
-  m_TagString: Untagged
+  m_TagString: Dog
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

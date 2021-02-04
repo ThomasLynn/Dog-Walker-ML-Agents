@@ -10,7 +10,7 @@ public class Arena : MonoBehaviour
 
     private int currentDogCount;
 
-    int layerMask;
+    private int layerMask;
 
     public void Start()
     {
@@ -39,8 +39,8 @@ public class Arena : MonoBehaviour
                 Vector3 spawnPosition = transform.position + new Vector3(Random.Range(-9f, 9f), 1, Random.Range(-9f, 9f));
                 if (!Physics.CheckBox(spawnPosition, new Vector3(1f, 0.7f, 1f), Quaternion.identity, layerMask))
                 {
-                    GameObject go = Instantiate(dogPrefab, spawnPosition, Quaternion.identity) as GameObject;
-                    go.transform.parent = transform;
+                    GameObject go = Instantiate(dogPrefab, spawnPosition, Quaternion.identity, transform) as GameObject;
+                    //go.transform.parent = transform;
                     currentDogCount++;
                     break;
                 }

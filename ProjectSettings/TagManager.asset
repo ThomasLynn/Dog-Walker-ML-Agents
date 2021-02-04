@@ -11,6 +11,7 @@ TagManager:
   - Floor
   - Ball
   - Obstacle
+  - Dog
   layers:
   - Default
   - TransparentFX
