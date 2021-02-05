@@ -9,6 +9,7 @@ public class DogAgent : Unity.MLAgents.Agent
 {
 
     public Transform body;
+    public Transform head;
     public List<Transform> LegParts;
 
     private GameObject CurrentDogBody;
@@ -25,6 +26,8 @@ public class DogAgent : Unity.MLAgents.Agent
     void Start()
     {
         ParentArena = transform.parent.GetComponent<Arena>();
+        body.GetComponent<BodyScript>().SetArenaAndReward(this, gameObject, -.05f);
+        head.GetComponent<BodyScript>().SetArenaAndReward(this, gameObject, -.05f);
 
         layerMask = 1 << 8;
         layerMask = ~layerMask;
@@ -153,11 +156,10 @@ public class DogAgent : Unity.MLAgents.Agent
 
     public override void OnEpisodeBegin()
     {
-        body.GetComponent<BodyScript>().SetArenaAndReward(this, gameObject, -1);
         //height = body.position.y;
         SetRandomTarget();
         float angle = Mathf.Atan2(Target.z - transform.position.z, Target.x - transform.position.x) * Mathf.Rad2Deg;
-        Debug.Log("rotating to angle" + angle);
+        //Debug.Log("rotating to angle" + angle);
         transform.rotation = Quaternion.Euler(new Vector3(0, angle, 0));
     }
 
@@ -165,12 +167,12 @@ public class DogAgent : Unity.MLAgents.Agent
     {
         for(int i = 0; i < 50; i++)
         {
-            Debug.Log("looping");
+            //Debug.Log("looping");
             Vector3 v = transform.parent.position;
             v += new Vector3(Random.Range(-9f, 9f), 0.5f, Random.Range(-9f, 9f));
             if (!Physics.CheckBox(v, boxSize, Quaternion.identity, layerMask))
             {
-                Debug.Log("setting target "+v);
+                //Debug.Log("setting target "+v);
                 SetTarget(v);
                 //drawBox(v, boxSize, Color.green);
                 return;
@@ -181,7 +183,7 @@ public class DogAgent : Unity.MLAgents.Agent
                 //drawBox(v, boxSize, Color.red);
             }
         }
-        Debug.Log("setting target to zero");
+        //Debug.Log("setting target to zero");
         SetTarget(Vector3.zero);
         
     }
