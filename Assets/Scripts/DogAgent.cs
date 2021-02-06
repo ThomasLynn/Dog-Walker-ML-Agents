@@ -77,15 +77,16 @@ public class DogAgent : Unity.MLAgents.Agent
 
         float newDistance = GetDistance();
         //Debug.Log("distance " + NewDistance);
-        if (newDistance < distance)
-        {
-            AddReward((distance - newDistance)/10f);
-            //Debug.Log("reward added " + (distance - newDistance) / 10f);
-            distance = newDistance;
-        }
+        //if (newDistance < distance)
+        //{
+        AddReward((distance - newDistance)/10f);
+        //Debug.Log("reward added " + (distance - newDistance) / 10f);
+        distance = newDistance;
+        //}
+        
         if (newDistance < 0.5f)
         {
-            SetRandomTarget();
+            //SetRandomTarget();
         }
 
         /*if (StepCount >= 10)
@@ -100,6 +101,22 @@ public class DogAgent : Unity.MLAgents.Agent
     {
         Vector3 localTarget = transform.InverseTransformPoint(Target);
         Vector3 localTargetNorm = localTarget.normalized;
+
+        //sensor.AddObservation(body.rotation.eulerAngles.y);
+        float x = body.rotation.eulerAngles.x;
+        if (x > 180f)
+        {
+            x -= 360f;
+        }
+        //Debug.Log("x "+Mathf.Atan(x));
+        sensor.AddObservation(Mathf.Atan(x));
+        float z = body.rotation.eulerAngles.z - 90;
+        if (z > 180f)
+        {
+            z -= 360;
+        }
+        //Debug.Log("z "+Mathf.Atan(z / 10f));
+        sensor.AddObservation(Mathf.Atan(z/10f));
 
         sensor.AddObservation(Mathf.Atan(localTarget.x));
         sensor.AddObservation(Mathf.Atan(localTarget.y));

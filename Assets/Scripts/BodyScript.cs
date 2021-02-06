@@ -17,7 +17,7 @@ public class BodyScript : MonoBehaviour
 
     void OnCollisionStay(Collision collisionInfo)
     {
-        Debug.Log("colliding");
+        //Debug.Log("colliding");
         ParentAgent.AddReward(Reward);
         ParentAgent.EndEpisode();
         ParentAgent.GetParentArena().ResetEnv(ParentObject);
