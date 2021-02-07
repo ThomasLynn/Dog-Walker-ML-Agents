@@ -26,8 +26,8 @@ public class DogAgent : Unity.MLAgents.Agent
     void Start()
     {
         ParentArena = transform.parent.GetComponent<Arena>();
-        body.GetComponent<BodyScript>().SetArenaAndReward(this, gameObject, -.05f);
-        head.GetComponent<BodyScript>().SetArenaAndReward(this, gameObject, -.05f);
+        body.GetComponent<BodyScript>().SetArenaAndReward(this, gameObject, -.1f);
+        head.GetComponent<BodyScript>().SetArenaAndReward(this, gameObject, -.1f);
 
         layerMask = 1 << 8;
         layerMask = ~layerMask;
@@ -50,7 +50,7 @@ public class DogAgent : Unity.MLAgents.Agent
         for (int i = 0; i < LegParts.Count; i++)
         {
             float turnAmount = 0f;
-            if (actionBuffers.DiscreteActions[i] == 1)
+            /*if (actionBuffers.DiscreteActions[i] == 1)
             {
                 turnAmount = 0.5f;
             }
@@ -63,6 +63,14 @@ public class DogAgent : Unity.MLAgents.Agent
                 turnAmount = -0.5f;
             }
             else if (actionBuffers.DiscreteActions[i] == 4)
+            {
+                turnAmount = -1f;
+            }*/
+            if (actionBuffers.DiscreteActions[i] == 1)
+            {
+                turnAmount = 1f;
+            }
+            else if (actionBuffers.DiscreteActions[i] == 2)
             {
                 turnAmount = -1f;
             }
@@ -79,14 +87,14 @@ public class DogAgent : Unity.MLAgents.Agent
         //Debug.Log("distance " + NewDistance);
         //if (newDistance < distance)
         //{
-        AddReward((distance - newDistance)/10f);
+        AddReward(distance - newDistance);
         //Debug.Log("reward added " + (distance - newDistance) / 10f);
         distance = newDistance;
         //}
         
         if (newDistance < 0.5f)
         {
-            //SetRandomTarget();
+            SetRandomTarget();
         }
 
         /*if (StepCount >= 10)
@@ -145,7 +153,7 @@ public class DogAgent : Unity.MLAgents.Agent
                 //actionsOut.ContinuousActions.Array[i] = 1.0f;
             }
         }
-        else if (Input.GetKey(KeyCode.S))
+        /*else if (Input.GetKey(KeyCode.S))
         {
             for (int i = 0; i < 9; i++)
             {
@@ -160,7 +168,7 @@ public class DogAgent : Unity.MLAgents.Agent
                 actionsOut.DiscreteActions.Array[i] = 4;
                 //actionsOut.ContinuousActions.Array[i] = -1.0f;
             }
-        }
+        }*/
         else
         {
             for (int i = 0; i < 9; i++)
@@ -182,22 +190,24 @@ public class DogAgent : Unity.MLAgents.Agent
 
     private void SetRandomTarget()
     {
-        for(int i = 0; i < 50; i++)
+        for (int i = 0; i < 50; i++)
         {
             //Debug.Log("looping");
             Vector3 v = transform.parent.position;
-            v += new Vector3(Random.Range(-9f, 9f), 0.5f, Random.Range(-9f, 9f));
-            if (!Physics.CheckBox(v, boxSize, Quaternion.identity, layerMask))
-            {
-                //Debug.Log("setting target "+v);
-                SetTarget(v);
-                //drawBox(v, boxSize, Color.green);
-                return;
-            }
-            else
-            {
+            v += new Vector3(Random.Range(-24f, 24f), 0.5f, Random.Range(-24f, 24f));
+            if (Vector3.Distance(body.position, v) > 12.0f) {
+                if (!Physics.CheckBox(v, boxSize, Quaternion.identity, layerMask))
+                {
+                    //Debug.Log("setting target "+v);
+                    SetTarget(v);
+                    //drawBox(v, boxSize, Color.green);
+                    return;
+                }
+                else
+                {
 
-                //drawBox(v, boxSize, Color.red);
+                    //drawBox(v, boxSize, Color.red);
+                }
             }
         }
         //Debug.Log("setting target to zero");
