@@ -14,6 +14,8 @@ public class DogAgent : Unity.MLAgents.Agent
 
     private GameObject CurrentDogBody;
 
+    private float[] startingAngles;
+
     private Arena ParentArena;
 
     private float distance;
@@ -33,11 +35,33 @@ public class DogAgent : Unity.MLAgents.Agent
         layerMask = ~layerMask;
 
         boxSize = new Vector3(1.0f, 0.1f, 1.0f);
+
+        startingAngles = new float[LegParts.Count];
+        for (int i = 0; i < LegParts.Count; i++)
+        {
+            startingAngles[i] = LegParts[i].localRotation.eulerAngles.z;
+            //print("angles " + i + " " +startingAngles[i]);
+        }
+        
     }
 
     public Arena GetParentArena()
     {
         return ParentArena;
+    }
+
+    private float UnwrapAngle(float angle)
+    {
+        float wAngle = angle % 360f;
+        while (wAngle > 180)
+        {
+            return wAngle - 360f;
+        }
+        if (wAngle < -180f)
+        {
+            return wAngle + 360f;
+        }
+        return wAngle;
     }
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
@@ -47,40 +71,31 @@ public class DogAgent : Unity.MLAgents.Agent
             EndEpisode();
             ParentArena.ResetEnv(gameObject);
         }
-        for (int i = 0; i < LegParts.Count; i++)
+        if (startingAngles != null)
         {
-            float turnAmount = 0f;
-            /*if (actionBuffers.DiscreteActions[i] == 1)
+            for (int i = 0; i < LegParts.Count; i++)
             {
-                turnAmount = 0.5f;
-            }
-            else if (actionBuffers.DiscreteActions[i] == 2)
-            {
-                turnAmount = 1f;
-            }
-            else if (actionBuffers.DiscreteActions[i] == 3)
-            {
-                turnAmount = -0.5f;
-            }
-            else if (actionBuffers.DiscreteActions[i] == 4)
-            {
-                turnAmount = -1f;
-            }*/
-            if (actionBuffers.DiscreteActions[i] == 1)
-            {
-                turnAmount = 1f;
-            }
-            else if (actionBuffers.DiscreteActions[i] == 2)
-            {
-                turnAmount = -1f;
-            }
-            //float turnAmount = Mathf.Clamp(actionBuffers.ContinuousActions[i], -1f, 1f);
+                //float turnAmount = 0f;
 
-            HingeJoint joint = LegParts[i].GetComponent<HingeJoint>();
-            JointMotor motor = joint.motor;
-            motor.targetVelocity = turnAmount * 200f;
-            joint.motor = motor;
+                //float turnTarget = Mathf.Clamp(actionBuffers.ContinuousActions[i], 0f, 1f);
+                float turnTarget = (actionBuffers.ContinuousActions[i] + 1) / 2f;
+
+                HingeJoint joint = LegParts[i].GetComponent<HingeJoint>();
+
+                //print(i + " " + LegParts[i].localRotation.eulerAngles.z + " " + startingAngles[i] + " " + UnwrapAngle(LegParts[i].localRotation.eulerAngles.z - startingAngles[i]) + " " + joint.limits.min + " " + joint.limits.max);
+                //print("local rotation "+LegParts[i].localRotation.eulerAngles);
+
+                float currentTurn = (UnwrapAngle(LegParts[i].localRotation.eulerAngles.z - startingAngles[i]) - joint.limits.min) / (joint.limits.max - +joint.limits.min);
+
+                float turnAmount = Mathf.Clamp((currentTurn - turnTarget) * -10000f, -200f, 200f);
+                //print("diff " + (currentTurn - turnTarget)+ " "+ turnAmount);
+
+                JointMotor motor = joint.motor;
+                motor.targetVelocity = turnAmount;
+                joint.motor = motor;
+            }
         }
+        
         // Convert the second action to turning left or right
 
         float newDistance = GetDistance();
@@ -111,7 +126,7 @@ public class DogAgent : Unity.MLAgents.Agent
         Vector3 localTargetNorm = localTarget.normalized;
 
         //sensor.AddObservation(body.rotation.eulerAngles.y);
-        float x = body.rotation.eulerAngles.x;
+        /*float x = body.rotation.eulerAngles.x;
         if (x > 180f)
         {
             x -= 360f;
@@ -124,7 +139,7 @@ public class DogAgent : Unity.MLAgents.Agent
             z -= 360;
         }
         //Debug.Log("z "+Mathf.Atan(z / 10f));
-        sensor.AddObservation(Mathf.Atan(z/10f));
+        sensor.AddObservation(Mathf.Atan(z/10f));*/
 
         sensor.AddObservation(Mathf.Atan(localTarget.x));
         sensor.AddObservation(Mathf.Atan(localTarget.y));
@@ -141,16 +156,16 @@ public class DogAgent : Unity.MLAgents.Agent
         {
             for (int i = 0; i < 9; i++)
             {
-                actionsOut.DiscreteActions.Array[i] = 1;
-                //actionsOut.ContinuousActions.Array[i] = 0.5f;
+                //actionsOut.DiscreteActions.Array[i] = 1;
+                actionsOut.ContinuousActions.Array[i] = 1.0f;
             }
         }
-        else if (Input.GetKey(KeyCode.E))
+        else if (Input.GetKey(KeyCode.S))
         {
             for (int i = 0; i < 9; i++)
             {
-                actionsOut.DiscreteActions.Array[i] = 2;
-                //actionsOut.ContinuousActions.Array[i] = 1.0f;
+                //actionsOut.DiscreteActions.Array[i] = -1;
+                actionsOut.ContinuousActions.Array[i] = -1f;
             }
         }
         /*else if (Input.GetKey(KeyCode.S))
@@ -173,8 +188,8 @@ public class DogAgent : Unity.MLAgents.Agent
         {
             for (int i = 0; i < 9; i++)
             {
-                actionsOut.DiscreteActions.Array[i] = 0;
-                //actionsOut.ContinuousActions.Array[i] = 0f;
+                //actionsOut.DiscreteActions.Array[i] = 0;
+                actionsOut.ContinuousActions.Array[i] = 0f;
             }
         }
     }
