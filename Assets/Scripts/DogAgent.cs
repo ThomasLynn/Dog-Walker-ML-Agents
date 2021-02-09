@@ -11,10 +11,10 @@ public class DogAgent : Unity.MLAgents.Agent
     public Transform body;
     public Transform head;
     public List<Transform> LegParts;
+    public List<float> startingAngles;
 
     private GameObject CurrentDogBody;
 
-    private float[] startingAngles;
 
     private Arena ParentArena;
 
@@ -36,12 +36,13 @@ public class DogAgent : Unity.MLAgents.Agent
 
         boxSize = new Vector3(1.0f, 0.1f, 1.0f);
 
-        startingAngles = new float[LegParts.Count];
+        /*startingAngles = new float[LegParts.Count];
+
         for (int i = 0; i < LegParts.Count; i++)
         {
-            startingAngles[i] = LegParts[i].localRotation.eulerAngles.z;
+            startingAngles[i] = getAngleFromJoint(LegParts[i].GetComponent<HingeJoint>());
             //print("angles " + i + " " +startingAngles[i]);
-        }
+        }*/
         
     }
 
@@ -64,6 +65,12 @@ public class DogAgent : Unity.MLAgents.Agent
         return wAngle;
     }
 
+    private float getAngleFromJoint(HingeJoint joint)
+    {
+        //return Quaternion.Angle(joint.transform.rotation, joint.connectedBody.rotation);
+        return joint.transform.rotation.eulerAngles.z - joint.connectedBody.rotation.eulerAngles.z;
+    }
+
     public override void OnActionReceived(ActionBuffers actionBuffers)
     {
         if (StepCount >= MaxStep - 2)
@@ -78,16 +85,23 @@ public class DogAgent : Unity.MLAgents.Agent
                 //float turnAmount = 0f;
 
                 //float turnTarget = Mathf.Clamp(actionBuffers.ContinuousActions[i], 0f, 1f);
-                float turnTarget = actionBuffers.ContinuousActions[i];
+                float turnTarget = actionBuffers.ContinuousActions[i]*45f;
+
 
                 HingeJoint joint = LegParts[i].GetComponent<HingeJoint>();
+                float currentTurn = UnwrapAngle(getAngleFromJoint(joint) - startingAngles[i]);
 
                 //print(i + " " + LegParts[i].localRotation.eulerAngles.z + " " + startingAngles[i] + " " + UnwrapAngle(LegParts[i].localRotation.eulerAngles.z - startingAngles[i]) + " " + joint.limits.min + " " + joint.limits.max);
                 //print("local rotation "+LegParts[i].localRotation.eulerAngles);
+                //print(i+" rot " + getAngleFromJoint(joint) + " " + startingAngles[i] + " " + (getAngleFromJoint(joint)-startingAngles[i]));
+                
+                //float currentTurn = (() - joint.limits.min) / (joint.limits.max - +joint.limits.min);
 
-                float currentTurn = (UnwrapAngle(LegParts[i].localRotation.eulerAngles.z - startingAngles[i]) - joint.limits.min) / (joint.limits.max - +joint.limits.min);
-
-                float turnAmount = Mathf.Clamp((currentTurn - turnTarget) * -10000f, -200f, 200f);
+                //float turnAmount = Mathf.Clamp((currentTurn - turnTarget) * -10000f, -200f, 200f);
+                float turnAmount = Mathf.Clamp((currentTurn - turnTarget) * -10f, -200f, 200f);
+                
+                //print(i + " tar " + turnTarget + " " + currentTurn + " " + turnAmount);
+                
                 //print("diff " + (currentTurn - turnTarget)+ " "+ turnAmount);
 
                 JointMotor motor = joint.motor;
@@ -140,6 +154,9 @@ public class DogAgent : Unity.MLAgents.Agent
         }
         //Debug.Log("z "+Mathf.Atan(z / 10f));
         sensor.AddObservation(Mathf.Atan(z/10f));*/
+        Vector3 start = body.position;
+        Vector3 end = Vector3.MoveTowards(start, Target, 1f);
+        Debug.DrawLine(start, end, Color.green, 0.1f);
 
         sensor.AddObservation(Mathf.Atan(localTarget.x));
         sensor.AddObservation(Mathf.Atan(localTarget.y));
@@ -154,7 +171,7 @@ public class DogAgent : Unity.MLAgents.Agent
     {
         if (Input.GetKey(KeyCode.W))
         {
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < LegParts.Count; i++)
             {
                 //actionsOut.DiscreteActions.Array[i] = 1;
                 actionsOut.ContinuousActions.Array[i] = 1.0f;
@@ -162,7 +179,7 @@ public class DogAgent : Unity.MLAgents.Agent
         }
         else if (Input.GetKey(KeyCode.S))
         {
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < LegParts.Count; i++)
             {
                 //actionsOut.DiscreteActions.Array[i] = -1;
                 actionsOut.ContinuousActions.Array[i] = -1f;
@@ -186,7 +203,7 @@ public class DogAgent : Unity.MLAgents.Agent
         }*/
         else
         {
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < LegParts.Count; i++)
             {
                 //actionsOut.DiscreteActions.Array[i] = 0;
                 actionsOut.ContinuousActions.Array[i] = 0f;
@@ -198,9 +215,9 @@ public class DogAgent : Unity.MLAgents.Agent
     {
         //height = body.position.y;
         SetRandomTarget();
-        float angle = Mathf.Atan2(Target.z - transform.position.z, Target.x - transform.position.x) * Mathf.Rad2Deg;
+        float angle = Mathf.Atan2(Target.x - transform.position.x, Target.z - transform.position.z) * Mathf.Rad2Deg;
         //Debug.Log("rotating to angle" + angle);
-        transform.rotation = Quaternion.Euler(new Vector3(0, angle, 0));
+        transform.rotation = Quaternion.Euler(new Vector3(0, angle + 90 + Random.Range(-10f, 10f), 0));
     }
 
     private void SetRandomTarget()
@@ -210,7 +227,7 @@ public class DogAgent : Unity.MLAgents.Agent
             //Debug.Log("looping");
             Vector3 v = transform.parent.position;
             v += new Vector3(Random.Range(-24f, 24f), 0.5f, Random.Range(-24f, 24f));
-            if (Vector3.Distance(body.position, v) > 12.0f) {
+            if (Vector3.Distance(body.position, v) > 6.0f) {
                 if (!Physics.CheckBox(v, boxSize, Quaternion.identity, layerMask))
                 {
                     //Debug.Log("setting target "+v);
