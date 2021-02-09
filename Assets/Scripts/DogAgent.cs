@@ -78,7 +78,7 @@ public class DogAgent : Unity.MLAgents.Agent
                 //float turnAmount = 0f;
 
                 //float turnTarget = Mathf.Clamp(actionBuffers.ContinuousActions[i], 0f, 1f);
-                float turnTarget = (actionBuffers.ContinuousActions[i] + 1) / 2f;
+                float turnTarget = actionBuffers.ContinuousActions[i];
 
                 HingeJoint joint = LegParts[i].GetComponent<HingeJoint>();
 

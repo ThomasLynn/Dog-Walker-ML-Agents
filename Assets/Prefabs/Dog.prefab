@@ -204,7 +204,7 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 5022602860645237092, guid: 6fc576065da1ac847a1231c87e54b035, type: 3}
+  m_Model: {fileID: 5022602860645237092, guid: 7b4f3b3314dc0e24a9043b00aac021bb, type: 3}
   m_InferenceDevice: 1
   m_BehaviorType: 0
   m_BehaviorName: Dog
@@ -618,7 +618,7 @@ PrefabInstance:
     - target: {fileID: 546401247220820151, guid: 5b3e54e2b21b5c5479a2aea41471c474,
         type: 3}
       propertyPath: m_ConnectedAnchor.x
-      value: -0.08333326
+      value: 0.083333455
       objectReference: {fileID: 0}
     - target: {fileID: 546401247220820151, guid: 5b3e54e2b21b5c5479a2aea41471c474,
         type: 3}
@@ -740,7 +740,7 @@ PrefabInstance:
     - target: {fileID: 546401247220820151, guid: 5b3e54e2b21b5c5479a2aea41471c474,
         type: 3}
       propertyPath: m_ConnectedAnchor.x
-      value: 0.24999987
+      value: 0.08333326
       objectReference: {fileID: 0}
     - target: {fileID: 546401247220820151, guid: 5b3e54e2b21b5c5479a2aea41471c474,
         type: 3}
@@ -872,7 +872,7 @@ PrefabInstance:
     - target: {fileID: 546401247220820151, guid: 5b3e54e2b21b5c5479a2aea41471c474,
         type: 3}
       propertyPath: m_ConnectedAnchor.x
-      value: 0.24999987
+      value: 0.08333326
       objectReference: {fileID: 0}
     - target: {fileID: 546401247220820151, guid: 5b3e54e2b21b5c5479a2aea41471c474,
         type: 3}
@@ -1004,7 +1004,7 @@ PrefabInstance:
     - target: {fileID: 7488943690772088292, guid: af8b9a9b98f94ff468c0c9fc8e7f810a,
         type: 3}
       propertyPath: m_ConnectedAnchor.x
-      value: -0.17767678
+      value: -0.011010071
       objectReference: {fileID: 0}
     - target: {fileID: 7488943690772088292, guid: af8b9a9b98f94ff468c0c9fc8e7f810a,
         type: 3}
@@ -1100,7 +1100,7 @@ PrefabInstance:
     - target: {fileID: 546401247220820151, guid: 5b3e54e2b21b5c5479a2aea41471c474,
         type: 3}
       propertyPath: m_ConnectedAnchor.x
-      value: -0.08333326
+      value: 0.083333455
       objectReference: {fileID: 0}
     - target: {fileID: 546401247220820151, guid: 5b3e54e2b21b5c5479a2aea41471c474,
         type: 3}
