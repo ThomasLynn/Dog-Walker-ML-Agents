@@ -136,7 +136,7 @@ public class DogAgent : Unity.MLAgents.Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        Vector3 localTarget = transform.InverseTransformPoint(Target);
+        Vector3 localTarget = body.InverseTransformPoint(Target);
         Vector3 localTargetNorm = localTarget.normalized;
 
         //sensor.AddObservation(body.rotation.eulerAngles.y);
