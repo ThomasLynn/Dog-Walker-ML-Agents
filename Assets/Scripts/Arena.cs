@@ -8,43 +8,51 @@ public class Arena : MonoBehaviour
 
     public int dogCount;
 
+    public List<Transform> checkpoints;
+
     private int currentDogCount;
+
+    private List<GameObject> dogs;
 
     private int layerMask;
 
     public void Start()
     {
-        currentDogCount = 0;
+        dogs = new List<GameObject>();
         layerMask = 1 << 8;
         layerMask = ~layerMask;
-        SpawnToNumber(dogCount);
+        Spawn();
     }
 
     public void ResetEnv(GameObject ToDelete)
     {
         Destroy(ToDelete);
-        currentDogCount--;
-        SpawnToNumber(dogCount);
+        dogs.Remove(ToDelete);
+        Spawn();
     }
 
-    private void SpawnToNumber(int number)
+    private void Spawn()
     {
         //Debug.Log(currentDogCount+" "+ number);
-        for (int j = currentDogCount; j < number; j++)
+        for (int j = dogs.Count; j < dogCount; j++)
         {
             //Debug.Log("trying to spawn");
-            for (int i = 0; i < 50; i++)
-            {
-                //Debug.Log("finding spawn location");
-                Vector3 spawnPosition = transform.position + new Vector3(Random.Range(-9f, 9f), 1, Random.Range(-9f, 9f));
-                if (!Physics.CheckBox(spawnPosition, new Vector3(1f, 0.7f, 1f), Quaternion.identity, layerMask))
-                {
-                    GameObject go = Instantiate(dogPrefab, spawnPosition, Quaternion.identity, transform) as GameObject;
-                    //go.transform.parent = transform;
-                    currentDogCount++;
-                    break;
-                }
-            }
+            //for (int i = 0; i < 50; i++)
+            //{
+            //Debug.Log("finding spawn location");
+            int checkpointNumber = Random.Range(0, checkpoints.Count);
+            
+                //Vector3 spawnPosition = transform.position + new Vector3(Random.Range(-9f, 9f), 1, Random.Range(-9f, 9f));
+                //if (!Physics.CheckBox(spawnPosition, new Vector3(1f, 0.7f, 1f), Quaternion.identity, layerMask))
+                //{
+            GameObject go = Instantiate(dogPrefab, checkpoints[checkpointNumber].position, Quaternion.identity, transform) as GameObject;
+            go.GetComponent<DogAgent>().SetCheckpointNumber(checkpointNumber);
+            go.GetComponent<DogAgent>().SetRandomTarget(true);
+            //go.transform.parent = transform;
+            dogs.Add(go);
+                //break;
+                //}
+            //}
         }
         
     }

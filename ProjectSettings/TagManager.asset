@@ -12,6 +12,8 @@ TagManager:
   - Ball
   - Obstacle
   - Dog
+  - Arena
+  - Lava
   layers:
   - Default
   - TransparentFX

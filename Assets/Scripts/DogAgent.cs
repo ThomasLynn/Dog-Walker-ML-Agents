@@ -8,31 +8,33 @@ using Unity.MLAgents.Sensors;
 public class DogAgent : Unity.MLAgents.Agent
 {
 
+    public float bodyRewardLoss;
     public Transform body;
     public Transform head;
     public List<Transform> LegParts;
     public List<float> startingAngles;
 
+    public float raycastDistance;
+    private int layerMask;
+
+    private int checkpointNumber;
+
     private GameObject CurrentDogBody;
-
-
-    private Arena ParentArena;
 
     private float distance;
     //private float height;
-    private int layerMask;
+    //private int layerMask;
 
     private Vector3 Target;
     private Vector3 boxSize;
 
     void Start()
     {
-        ParentArena = transform.parent.GetComponent<Arena>();
-        body.GetComponent<BodyScript>().SetArenaAndReward(this, gameObject, -.1f);
-        head.GetComponent<BodyScript>().SetArenaAndReward(this, gameObject, -.1f);
+        body.GetComponent<BodyScript>().SetArenaAndReward(this, gameObject, bodyRewardLoss);
+        head.GetComponent<BodyScript>().SetArenaAndReward(this, gameObject, bodyRewardLoss);
 
-        layerMask = 1 << 8;
-        layerMask = ~layerMask;
+        layerMask = 1 << 9;
+        //layerMask = ~layerMask;
 
         boxSize = new Vector3(1.0f, 0.1f, 1.0f);
 
@@ -48,7 +50,12 @@ public class DogAgent : Unity.MLAgents.Agent
 
     public Arena GetParentArena()
     {
-        return ParentArena;
+        return transform.parent.GetComponent<Arena>();
+    }
+
+    public void SetCheckpointNumber(int num)
+    {
+        checkpointNumber = num;
     }
 
     private float UnwrapAngle(float angle)
@@ -76,7 +83,7 @@ public class DogAgent : Unity.MLAgents.Agent
         if (StepCount >= MaxStep - 2)
         {
             EndEpisode();
-            ParentArena.ResetEnv(gameObject);
+            GetParentArena().ResetEnv(gameObject);
         }
         if (startingAngles != null)
         {
@@ -98,7 +105,7 @@ public class DogAgent : Unity.MLAgents.Agent
                 //float currentTurn = (() - joint.limits.min) / (joint.limits.max - +joint.limits.min);
 
                 //float turnAmount = Mathf.Clamp((currentTurn - turnTarget) * -10000f, -200f, 200f);
-                float turnAmount = Mathf.Clamp((currentTurn - turnTarget) * -10f, -200f, 200f);
+                float turnAmount = Mathf.Clamp((currentTurn - turnTarget) * -20f, -400f, 400f);
                 
                 //print(i + " tar " + turnTarget + " " + currentTurn + " " + turnAmount);
                 
@@ -121,9 +128,10 @@ public class DogAgent : Unity.MLAgents.Agent
         distance = newDistance;
         //}
         
-        if (newDistance < 0.5f)
+        if (newDistance < 1.0f)
         {
-            SetRandomTarget();
+            checkpointNumber = checkpointNumber + 1;
+            SetRandomTarget(false);
         }
 
         /*if (StepCount >= 10)
@@ -140,7 +148,7 @@ public class DogAgent : Unity.MLAgents.Agent
         Vector3 localTargetNorm = localTarget.normalized;
 
         //sensor.AddObservation(body.rotation.eulerAngles.y);
-        /*float x = body.rotation.eulerAngles.x;
+        float x = body.rotation.eulerAngles.x;
         if (x > 180f)
         {
             x -= 360f;
@@ -153,7 +161,7 @@ public class DogAgent : Unity.MLAgents.Agent
             z -= 360;
         }
         //Debug.Log("z "+Mathf.Atan(z / 10f));
-        sensor.AddObservation(Mathf.Atan(z/10f));*/
+        sensor.AddObservation(Mathf.Atan(z/10f));
         Vector3 start = body.position;
         Vector3 end = Vector3.MoveTowards(start, Target, 1f);
         Debug.DrawLine(start, end, Color.green, 0.1f);
@@ -165,6 +173,37 @@ public class DogAgent : Unity.MLAgents.Agent
         sensor.AddObservation(localTargetNorm.y);
         sensor.AddObservation(localTargetNorm.z);
         sensor.AddObservation(Mathf.Atan(localTarget.magnitude));
+
+        RaycastHit hit;
+        for (int i = -8; i <= 2; i++)
+        {
+            for (int j = -5; j <= 5; j++)
+            {
+                Vector3 p1 = body.position;
+                Vector3 pt = new Vector3(i * 0.4f, 1, j * 0.4f);
+                pt = Quaternion.Euler(0, body.rotation.eulerAngles.y, 0) * pt;
+                
+                p1 = p1 + pt;
+                if (Physics.SphereCast(p1, 0.2f, new Vector3(0,-1,0), out hit, raycastDistance, layerMask))
+                {
+                    //print(distance + " " + hit.point + " " + hit.distance);
+                    //print((float)(hit.distance / raycastDistance) + " " + ((hit.collider.tag == "Lava") ? 1f : 0f) + " " + ((hit.collider.tag == "Obstacle") ? 1f : 0f));
+                    Debug.DrawLine(p1, hit.point, Color.yellow, 0.1f);
+                    sensor.AddObservation(hit.distance / raycastDistance);
+                    sensor.AddObservation(hit.collider.tag == "Lava");
+                    sensor.AddObservation(hit.collider.tag == "Obstacle");
+                }
+                else
+                {
+                    sensor.AddObservation(1f);
+                    sensor.AddObservation(0f);
+                    sensor.AddObservation(0f);
+                }
+            }
+        }
+        //print("sensor "+ sensor);
+
+        // 9 + 121 * 3 = 372
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -214,15 +253,12 @@ public class DogAgent : Unity.MLAgents.Agent
     public override void OnEpisodeBegin()
     {
         //height = body.position.y;
-        SetRandomTarget();
-        float angle = Mathf.Atan2(Target.x - transform.position.x, Target.z - transform.position.z) * Mathf.Rad2Deg;
-        //Debug.Log("rotating to angle" + angle);
-        transform.rotation = Quaternion.Euler(new Vector3(0, angle + 90 + Random.Range(-10f, 10f), 0));
+        SetRandomTarget(true);
     }
 
-    private void SetRandomTarget()
+    public void SetRandomTarget(bool turn)
     {
-        for (int i = 0; i < 50; i++)
+        /*for (int i = 0; i < 50; i++)
         {
             //Debug.Log("looping");
             Vector3 v = transform.parent.position;
@@ -241,10 +277,13 @@ public class DogAgent : Unity.MLAgents.Agent
                     //drawBox(v, boxSize, Color.red);
                 }
             }
-        }
+        }*/
+
         //Debug.Log("setting target to zero");
-        SetTarget(Vector3.zero);
-        
+        //SetTarget(Vector3.zero);
+        SetTarget(GetParentArena().checkpoints[(checkpointNumber + 1) % GetParentArena().checkpoints.Count].position, turn);
+
+
     }
 
     private void drawBox(Vector3 center, Vector3 halfSize, Color color)
@@ -255,10 +294,17 @@ public class DogAgent : Unity.MLAgents.Agent
         Debug.DrawLine(center, center + new Vector3(-halfSize.x, halfSize.y, -halfSize.z), color, 1.0f);
     }
 
-    private void SetTarget(Vector3 LocalTarget)
+    private void SetTarget(Vector3 LocalTarget, bool turn)
     {
         Target = LocalTarget;
         distance = GetDistance();
+        if (turn)
+        {
+            float angle = Mathf.Atan2(Target.x - transform.position.x, Target.z - transform.position.z) * Mathf.Rad2Deg;
+            //Debug.Log("rotating to angle" + angle);
+            transform.rotation = Quaternion.Euler(new Vector3(0, angle + 90 + Random.Range(-10f, 10f), 0));
+        }
+        
     }
 
     private float GetDistance()
