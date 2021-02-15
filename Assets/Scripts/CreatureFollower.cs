@@ -9,6 +9,8 @@ public class CreatureFollower : MonoBehaviour
 
     public Transform arena;
 
+    public float cameraSpeed;
+
     public bool follow;
 
     private Vector3 startingPos;
@@ -34,14 +36,14 @@ public class CreatureFollower : MonoBehaviour
                     //print("moving " + transform.position);
                     Vector3 bodyPos = child2.Find("Body").position;
                     Vector3 newPos = new Vector3(bodyPos.x + offset.x, offset.y, bodyPos.z + offset.z);
-                    transform.position = newPos;
+                    transform.position = Vector3.MoveTowards(transform.position, newPos, cameraSpeed * Time.deltaTime);
                     break;
                 }
             }
         }
         else
         {
-            transform.position = startingPos;
+            transform.position = Vector3.MoveTowards(transform.position, startingPos, cameraSpeed * Time.deltaTime);
         }
     }
 }
