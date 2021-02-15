@@ -929,7 +929,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dogPrefab: {fileID: 4046083522070765981, guid: b673467c1dbb423419c5686c79723aa4,
     type: 3}
-  dogCount: 1
+  dogCount: 10
   checkpoints:
   - {fileID: 8166177255243243126}
   - {fileID: 2058774802747028174}

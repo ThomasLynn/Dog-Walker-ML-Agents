@@ -175,26 +175,27 @@ public class DogAgent : Unity.MLAgents.Agent
         sensor.AddObservation(Mathf.Atan(localTarget.magnitude));
 
         RaycastHit hit;
-        for (int i = -8; i <= 2; i++)
+        for (int i = -10; i <= 2; i++)
         {
-            for (int j = -5; j <= 5; j++)
+            for (int j = -8; j <= 8; j++)
             {
                 Vector3 p1 = body.position;
-                Vector3 pt = new Vector3(i * 0.4f, 1, j * 0.4f);
+                Vector3 pt = new Vector3(i * 0.25f, 1, j * 0.25f);
                 pt = Quaternion.Euler(0, body.rotation.eulerAngles.y, 0) * pt;
                 
                 p1 = p1 + pt;
-                if (Physics.SphereCast(p1, 0.2f, new Vector3(0,-1,0), out hit, raycastDistance, layerMask))
+                if (Physics.SphereCast(p1, 0.1f, new Vector3(0,-1,0), out hit, raycastDistance, layerMask))
                 {
                     //print(distance + " " + hit.point + " " + hit.distance);
                     //print((float)(hit.distance / raycastDistance) + " " + ((hit.collider.tag == "Lava") ? 1f : 0f) + " " + ((hit.collider.tag == "Obstacle") ? 1f : 0f));
-                    Debug.DrawLine(p1, hit.point, Color.yellow, 0.1f);
+                    //Debug.DrawLine(p1, hit.point, Color.yellow, 0.1f);
                     sensor.AddObservation(hit.distance / raycastDistance);
                     sensor.AddObservation(hit.collider.tag == "Lava");
                     sensor.AddObservation(hit.collider.tag == "Obstacle");
                 }
                 else
                 {
+                    Debug.DrawLine(p1, p1 + new Vector3(0,-raycastDistance,0), Color.white, 0.1f);
                     sensor.AddObservation(1f);
                     sensor.AddObservation(0f);
                     sensor.AddObservation(0f);
