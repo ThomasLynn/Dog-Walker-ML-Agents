@@ -48,7 +48,7 @@ PrefabInstance:
     - target: {fileID: 7488943690772088292, guid: af8b9a9b98f94ff468c0c9fc8e7f810a,
         type: 3}
       propertyPath: m_Motor.force
-      value: 300
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 7488943690772088292, guid: af8b9a9b98f94ff468c0c9fc8e7f810a,
         type: 3}
@@ -154,7 +154,7 @@ PrefabInstance:
     - target: {fileID: 7488943690772088292, guid: af8b9a9b98f94ff468c0c9fc8e7f810a,
         type: 3}
       propertyPath: m_Motor.force
-      value: 300
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 7488943690772088292, guid: af8b9a9b98f94ff468c0c9fc8e7f810a,
         type: 3}
@@ -269,7 +269,7 @@ PrefabInstance:
     - target: {fileID: 7488943690772088292, guid: af8b9a9b98f94ff468c0c9fc8e7f810a,
         type: 3}
       propertyPath: m_Motor.force
-      value: 300
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 7488943690772088292, guid: af8b9a9b98f94ff468c0c9fc8e7f810a,
         type: 3}

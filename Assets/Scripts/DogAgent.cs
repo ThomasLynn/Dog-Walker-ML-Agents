@@ -105,7 +105,7 @@ public class DogAgent : Unity.MLAgents.Agent
                 //float currentTurn = (() - joint.limits.min) / (joint.limits.max - +joint.limits.min);
 
                 //float turnAmount = Mathf.Clamp((currentTurn - turnTarget) * -10000f, -200f, 200f);
-                float turnAmount = Mathf.Clamp((currentTurn - turnTarget) * -20f, -400f, 400f);
+                float turnAmount = Mathf.Clamp((currentTurn - turnTarget) * -10f, -300f, 300f);
                 
                 //print(i + " tar " + turnTarget + " " + currentTurn + " " + turnAmount);
                 
@@ -116,7 +116,6 @@ public class DogAgent : Unity.MLAgents.Agent
                 joint.motor = motor;
             }
         }
-        
         // Convert the second action to turning left or right
 
         float newDistance = GetDistance();

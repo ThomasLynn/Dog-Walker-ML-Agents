@@ -46,18 +46,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7488943690772088292, guid: af8b9a9b98f94ff468c0c9fc8e7f810a,
         type: 3}
+      propertyPath: m_Motor.force
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7488943690772088292, guid: af8b9a9b98f94ff468c0c9fc8e7f810a,
+        type: 3}
       propertyPath: m_ConnectedBody
       value: 
       objectReference: {fileID: 8791702902359959649}
     - target: {fileID: 7488943690772088292, guid: af8b9a9b98f94ff468c0c9fc8e7f810a,
         type: 3}
       propertyPath: m_ConnectedAnchor.x
-      value: -0.049020942
+      value: -0.23371994
       objectReference: {fileID: 0}
     - target: {fileID: 7488943690772088292, guid: af8b9a9b98f94ff468c0c9fc8e7f810a,
         type: 3}
       propertyPath: m_ConnectedAnchor.y
-      value: -0.94280887
+      value: -0.79549515
       objectReference: {fileID: 0}
     - target: {fileID: 7488943690772088292, guid: af8b9a9b98f94ff468c0c9fc8e7f810a,
         type: 3}
@@ -146,13 +151,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7488943690772088292, guid: af8b9a9b98f94ff468c0c9fc8e7f810a,
         type: 3}
+      propertyPath: m_Motor.force
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7488943690772088292, guid: af8b9a9b98f94ff468c0c9fc8e7f810a,
+        type: 3}
       propertyPath: m_ConnectedAnchor.x
-      value: 0.03713204
+      value: 0.05784273
       objectReference: {fileID: 0}
     - target: {fileID: 7488943690772088292, guid: af8b9a9b98f94ff468c0c9fc8e7f810a,
         type: 3}
       propertyPath: m_ConnectedAnchor.y
-      value: -0.03786795
+      value: -0.017157286
       objectReference: {fileID: 0}
     - target: {fileID: 7488943690772088292, guid: af8b9a9b98f94ff468c0c9fc8e7f810a,
         type: 3}
