@@ -189,13 +189,15 @@ public class DogAgent : Unity.MLAgents.Agent
                     //print((float)(hit.distance / raycastDistance) + " " + ((hit.collider.tag == "Lava") ? 1f : 0f) + " " + ((hit.collider.tag == "Obstacle") ? 1f : 0f));
                     //Debug.DrawLine(p1, hit.point, Color.yellow, 0.1f);
                     sensor.AddObservation(hit.distance / raycastDistance);
-                    sensor.AddObservation(hit.collider.tag == "Lava");
+                    sensor.AddObservation(hit.collider.tag == "Climb");
                     sensor.AddObservation(hit.collider.tag == "Obstacle");
+                    sensor.AddObservation(hit.collider.tag == "Ball");
                 }
                 else
                 {
                     Debug.DrawLine(p1, p1 + new Vector3(0,-raycastDistance,0), Color.white, 0.1f);
                     sensor.AddObservation(1f);
+                    sensor.AddObservation(0f);
                     sensor.AddObservation(0f);
                     sensor.AddObservation(0f);
                 }
