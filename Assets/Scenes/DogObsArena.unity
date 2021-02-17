@@ -358,9 +358,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc9d2d3d30e30e34aa29aa81f3912565, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: 0, y: 10, z: 6}
   arena: {fileID: 1968045220}
   cameraSpeed: 30
+  cameraRotSpeed: 360
+  height: 9
+  length: 7
   follow: 0
 --- !u!1 &941576358
 GameObject:
@@ -400,7 +402,7 @@ Light:
     m_Type: 2
     m_Resolution: -1
     m_CustomResolution: -1
-    m_Strength: 1
+    m_Strength: 0.489
     m_Bias: 0.05
     m_NormalBias: 0.4
     m_NearPlane: 0.2
