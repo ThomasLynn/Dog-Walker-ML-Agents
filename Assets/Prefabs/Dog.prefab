@@ -203,7 +203,7 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 5022602860645237092, guid: 9e6cab183d82b65449e4c3e15e52dbf7, type: 3}
+  m_Model: {fileID: 5022602860645237092, guid: 875d288ddf888274ca7da4c7ec973c1a, type: 3}
   m_InferenceDevice: 1
   m_BehaviorType: 0
   m_BehaviorName: Dog
