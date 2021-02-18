@@ -46,11 +46,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7488943690772088292, guid: af8b9a9b98f94ff468c0c9fc8e7f810a,
         type: 3}
-      propertyPath: m_Motor.force
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 7488943690772088292, guid: af8b9a9b98f94ff468c0c9fc8e7f810a,
-        type: 3}
       propertyPath: m_ConnectedBody
       value: 
       objectReference: {fileID: 8791702902359959649}
@@ -148,11 +143,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Segment
-      objectReference: {fileID: 0}
-    - target: {fileID: 7488943690772088292, guid: af8b9a9b98f94ff468c0c9fc8e7f810a,
-        type: 3}
-      propertyPath: m_Motor.force
-      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 7488943690772088292, guid: af8b9a9b98f94ff468c0c9fc8e7f810a,
         type: 3}
