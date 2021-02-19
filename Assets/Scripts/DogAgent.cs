@@ -122,7 +122,7 @@ public class DogAgent : Unity.MLAgents.Agent
         //Debug.Log("distance " + NewDistance);
         //if (newDistance < distance)
         //{
-        AddReward(distance - newDistance);
+        AddReward((distance - newDistance)*0.1f); // Scaled to keep the extrinsic value estimate below 1 (should soft-cap at about 0.5
         //Debug.Log("reward added " + (distance - newDistance) / 10f);
         distance = newDistance;
         //}
@@ -189,23 +189,24 @@ public class DogAgent : Unity.MLAgents.Agent
                     //print((float)(hit.distance / raycastDistance) + " " + ((hit.collider.tag == "Lava") ? 1f : 0f) + " " + ((hit.collider.tag == "Obstacle") ? 1f : 0f));
                     //Debug.DrawLine(p1, hit.point, Color.yellow, 0.1f);
                     sensor.AddObservation(hit.distance / raycastDistance);
-                    sensor.AddObservation(hit.collider.tag == "Climb");
-                    sensor.AddObservation(hit.collider.tag == "Obstacle");
-                    sensor.AddObservation(hit.collider.tag == "Ball");
+                    sensor.AddObservation(1f);
+                    //sensor.AddObservation(hit.collider.tag == "Climb");
+                    //sensor.AddObservation(hit.collider.tag == "Obstacle");
+                    //sensor.AddObservation(hit.collider.tag == "Ball");
                 }
                 else
                 {
-                    Debug.DrawLine(p1, p1 + new Vector3(0,-raycastDistance,0), Color.white, 0.1f);
+                    //Debug.DrawLine(p1, p1 + new Vector3(0,-raycastDistance,0), Color.white, 0.1f);
                     sensor.AddObservation(1f);
                     sensor.AddObservation(0f);
-                    sensor.AddObservation(0f);
-                    sensor.AddObservation(0f);
+                    //sensor.AddObservation(0f);
+                    //sensor.AddObservation(0f);
                 }
             }
         }
         //print("sensor "+ sensor);
 
-        // 9 + 121 * 3 = 372
+        // 9 + 221 * 2 = 451
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
