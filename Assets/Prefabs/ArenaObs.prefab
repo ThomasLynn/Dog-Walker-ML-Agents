@@ -943,7 +943,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66a65fc8bb7b3c14bb5062254323bd39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rewardPenalty: -0.3
+  rewardPenalty: -3
 --- !u!1001 &328788972277228276
 PrefabInstance:
   m_ObjectHideFlags: 0
