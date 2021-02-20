@@ -28,6 +28,9 @@ public class DogAgent : Unity.MLAgents.Agent
     private Vector3 Target;
     private Vector3 boxSize;
 
+    private bool showDebug = false;
+    private bool printAngles = false;
+
     void Start()
     {
         body.GetComponent<BodyScript>().SetArenaAndReward(this, gameObject, bodyRewardLoss);
@@ -77,6 +80,17 @@ public class DogAgent : Unity.MLAgents.Agent
         //return Quaternion.Angle(joint.transform.rotation, joint.connectedBody.rotation);
         return joint.transform.rotation.eulerAngles.z - joint.connectedBody.rotation.eulerAngles.z;
     }
+    void Update()
+    {
+        if (Input.GetKeyDown("n"))
+        {
+            showDebug = !showDebug;
+        }
+        if (Input.GetKeyDown("m"))
+        {
+            printAngles = !printAngles;
+        }
+    }
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
     {
@@ -92,15 +106,22 @@ public class DogAgent : Unity.MLAgents.Agent
                 //float turnAmount = 0f;
 
                 //float turnTarget = Mathf.Clamp(actionBuffers.ContinuousActions[i], 0f, 1f);
-                float turnTarget = actionBuffers.ContinuousActions[i]*45f;
 
 
                 HingeJoint joint = LegParts[i].GetComponent<HingeJoint>();
+
+                //float turnTarget = actionBuffers.ContinuousActions[i] * 45f;
+                float turnTarget = ((joint.limits.max + joint.limits.min) / 2f) + (actionBuffers.ContinuousActions[i] * (joint.limits.max - joint.limits.min) / 2f);
+                //print("joint " + ((joint.limits.max + joint.limits.min) / 2f) + " " + ((joint.limits.max - joint.limits.min) / 2f));
+
                 float currentTurn = UnwrapAngle(getAngleFromJoint(joint) - startingAngles[i]);
 
                 //print(i + " " + LegParts[i].localRotation.eulerAngles.z + " " + startingAngles[i] + " " + UnwrapAngle(LegParts[i].localRotation.eulerAngles.z - startingAngles[i]) + " " + joint.limits.min + " " + joint.limits.max);
                 //print("local rotation "+LegParts[i].localRotation.eulerAngles);
-                //print(i+" rot " + getAngleFromJoint(joint) + " " + startingAngles[i] + " " + (getAngleFromJoint(joint)-startingAngles[i]));
+                if (printAngles)
+                {
+                    print(i + " rot " + getAngleFromJoint(joint) + " " + startingAngles[i] + " " + (getAngleFromJoint(joint) - startingAngles[i]));
+                }
                 
                 //float currentTurn = (() - joint.limits.min) / (joint.limits.max - +joint.limits.min);
 
@@ -187,7 +208,10 @@ public class DogAgent : Unity.MLAgents.Agent
                 {
                     //print(distance + " " + hit.point + " " + hit.distance);
                     //print((float)(hit.distance / raycastDistance) + " " + ((hit.collider.tag == "Lava") ? 1f : 0f) + " " + ((hit.collider.tag == "Obstacle") ? 1f : 0f));
-                    //Debug.DrawLine(p1, hit.point, Color.yellow, 0.1f);
+                    if (showDebug)
+                    {
+                        Debug.DrawLine(p1, hit.point, Color.yellow, 0.1f);
+                    }
                     sensor.AddObservation(hit.distance / raycastDistance);
                     sensor.AddObservation(1f);
                     //sensor.AddObservation(hit.collider.tag == "Climb");
@@ -196,7 +220,10 @@ public class DogAgent : Unity.MLAgents.Agent
                 }
                 else
                 {
-                    //Debug.DrawLine(p1, p1 + new Vector3(0,-raycastDistance,0), Color.white, 0.1f);
+                    if (showDebug)
+                    {
+                        Debug.DrawLine(p1, p1 + new Vector3(0,-raycastDistance,0), Color.white, 0.1f);
+                    }
                     sensor.AddObservation(1f);
                     sensor.AddObservation(0f);
                     //sensor.AddObservation(0f);
