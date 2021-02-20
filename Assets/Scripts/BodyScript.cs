@@ -17,13 +17,9 @@ public class BodyScript : MonoBehaviour
 
     void OnCollisionStay(Collision collisionInfo)
     {
-        if (ParentObject != null)
-        {
-            ParentAgent.AddReward(Reward);
-            ParentAgent.EndEpisode();
-            ParentAgent.GetParentArena().ResetEnv(ParentObject);
-        }
-
         //Debug.Log("colliding");
+        ParentAgent.AddReward(Reward);
+        ParentAgent.EndEpisode();
+        ParentAgent.GetParentArena().ResetEnv(ParentObject);
     }
 }

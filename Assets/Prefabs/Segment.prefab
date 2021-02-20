@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 9126842863644713088}
   - component: {fileID: 1907626991559722290}
   - component: {fileID: 7488943690772088292}
-  - component: {fileID: 4301800632593549343}
   m_Layer: 8
   m_Name: Segment
   m_TagString: Dog
@@ -151,15 +150,3 @@ HingeJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
---- !u!114 &4301800632593549343
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 287261068254004374}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 997ea80be54e31b4db116f75a601a76b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
