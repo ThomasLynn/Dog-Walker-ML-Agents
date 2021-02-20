@@ -672,36 +672,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Leg_Hind
       objectReference: {fileID: 0}
-    - target: {fileID: 7915014200531072939, guid: f33dcccbe477bb648a0304195d7257f8,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.35
-      objectReference: {fileID: 0}
-    - target: {fileID: 7915014200531072939, guid: f33dcccbe477bb648a0304195d7257f8,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0.175
-      objectReference: {fileID: 0}
-    - target: {fileID: 7915014200531072939, guid: f33dcccbe477bb648a0304195d7257f8,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.881
-      objectReference: {fileID: 0}
-    - target: {fileID: 8757623009415029675, guid: f33dcccbe477bb648a0304195d7257f8,
-        type: 3}
-      propertyPath: m_ConnectedAnchor.x
-      value: 0.07
-      objectReference: {fileID: 0}
-    - target: {fileID: 8757623009415029675, guid: f33dcccbe477bb648a0304195d7257f8,
-        type: 3}
-      propertyPath: m_ConnectedAnchor.y
-      value: -0.85
-      objectReference: {fileID: 0}
-    - target: {fileID: 8757623009415029675, guid: f33dcccbe477bb648a0304195d7257f8,
-        type: 3}
-      propertyPath: m_AutoConfigureConnectedAnchor
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f33dcccbe477bb648a0304195d7257f8, type: 3}
 --- !u!4 &9014308774898584785 stripped

@@ -106,7 +106,7 @@ public class DogAgent : Unity.MLAgents.Agent
 
                 //print(i + " " + LegParts[i].localRotation.eulerAngles.z + " " + startingAngles[i] + " " + UnwrapAngle(LegParts[i].localRotation.eulerAngles.z - startingAngles[i]) + " " + joint.limits.min + " " + joint.limits.max);
                 //print("local rotation "+LegParts[i].localRotation.eulerAngles);
-                //print(i+" rot " + getAngleFromJoint(joint) + " " + startingAngles[i] + " " + (getAngleFromJoint(joint)-startingAngles[i]));
+                print(i+" rot " + getAngleFromJoint(joint) + " " + startingAngles[i] + " " + (getAngleFromJoint(joint)-startingAngles[i]));
                 
                 //float currentTurn = (() - joint.limits.min) / (joint.limits.max - +joint.limits.min);
 
