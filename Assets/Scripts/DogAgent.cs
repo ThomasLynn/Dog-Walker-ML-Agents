@@ -53,16 +53,6 @@ public class DogAgent : Unity.MLAgents.Agent
             startingAngles[i] = getAngleFromJoint(LegParts[i].GetComponent<HingeJoint>());
             //print("angles " + i + " " +startingAngles[i]);
         }*/
-        if (createCSV)
-        {
-            // Creating First row of titles manually..
-            string[] rowDataTemp = new string[LegParts.Count];
-            for (int i = 0; i < LegParts.Count; i++)
-            {
-                rowDataTemp[i] = "seg" + i;
-            }
-            rowData.Add(rowDataTemp);
-        }
 
     }
 
@@ -379,6 +369,18 @@ public class DogAgent : Unity.MLAgents.Agent
 
     private void Save()
     {
+
+        string filePath = "csvLimbData.csv";
+        if (!System.IO.File.Exists(filePath))
+        {
+            // Creating First row of titles manually..
+            string[] rowDataTemp = new string[LegParts.Count];
+            for (int i = 0; i < LegParts.Count; i++)
+            {
+                rowDataTemp[i] = "seg" + i;
+            }
+            rowData.Add(rowDataTemp);
+        }
         string[][] output = new string[rowData.Count][];
 
         for (int i = 0; i < output.Length; i++)
@@ -395,10 +397,11 @@ public class DogAgent : Unity.MLAgents.Agent
             sb.AppendLine(string.Join(delimiter, output[index]));
 
 
-        string filePath = "csvLimbData.csv";
 
-        StreamWriter outStream = System.IO.File.CreateText(filePath);
-        outStream.WriteLine(sb);
-        outStream.Close();
+        //StreamWriter outStream = System.IO.File.CreateText(filePath, true);
+        //outStream.WriteLine(sb);
+        //outStream.AppendAllText(sb);
+        //outStream.Close();
+        System.IO.File.AppendAllText(filePath, sb.ToString());
     }
 }
