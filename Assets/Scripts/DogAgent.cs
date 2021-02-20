@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Text;
+using System.IO;
 using UnityEngine;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
@@ -13,6 +15,7 @@ public class DogAgent : Unity.MLAgents.Agent
     public Transform head;
     public List<Transform> LegParts;
     public List<float> startingAngles;
+    public bool createCSV;
 
     public float raycastDistance;
     private int layerMask;
@@ -27,6 +30,8 @@ public class DogAgent : Unity.MLAgents.Agent
 
     private Vector3 Target;
     private Vector3 boxSize;
+
+    private List<string[]> rowData = new List<string[]>();
 
     private bool showDebug = false;
     private bool printAngles = false;
@@ -48,7 +53,17 @@ public class DogAgent : Unity.MLAgents.Agent
             startingAngles[i] = getAngleFromJoint(LegParts[i].GetComponent<HingeJoint>());
             //print("angles " + i + " " +startingAngles[i]);
         }*/
-        
+        if (createCSV)
+        {
+            // Creating First row of titles manually..
+            string[] rowDataTemp = new string[LegParts.Count];
+            for (int i = 0; i < LegParts.Count; i++)
+            {
+                rowDataTemp[i] = "seg" + i;
+            }
+            rowData.Add(rowDataTemp);
+        }
+
     }
 
     public Arena GetParentArena()
@@ -99,8 +114,10 @@ public class DogAgent : Unity.MLAgents.Agent
             EndEpisode();
             GetParentArena().ResetEnv(gameObject);
         }
+
         if (startingAngles != null)
         {
+            string[] rowDataTemp = new string[LegParts.Count];
             for (int i = 0; i < LegParts.Count; i++)
             {
                 //float turnAmount = 0f;
@@ -122,7 +139,10 @@ public class DogAgent : Unity.MLAgents.Agent
                 {
                     print(i + " rot " + getAngleFromJoint(joint) + " " + startingAngles[i] + " " + (getAngleFromJoint(joint) - startingAngles[i]));
                 }
-                
+                if (createCSV)
+                {
+                    rowDataTemp[i] = (UnwrapAngle(getAngleFromJoint(joint) - startingAngles[i])).ToString();
+                }
                 //float currentTurn = (() - joint.limits.min) / (joint.limits.max - +joint.limits.min);
 
                 //float turnAmount = Mathf.Clamp((currentTurn - turnTarget) * -10000f, -200f, 200f);
@@ -135,6 +155,10 @@ public class DogAgent : Unity.MLAgents.Agent
                 JointMotor motor = joint.motor;
                 motor.targetVelocity = turnAmount;
                 joint.motor = motor;
+            }
+            if (createCSV)
+            {
+                rowData.Add(rowDataTemp);
             }
         }
         // Convert the second action to turning left or right
@@ -195,7 +219,7 @@ public class DogAgent : Unity.MLAgents.Agent
         sensor.AddObservation(Mathf.Atan(localTarget.magnitude));
 
         RaycastHit hit;
-        for (int i = -10; i <= 2; i++)
+        for (int i = -14; i <= 2; i++)
         {
             for (int j = -8; j <= 8; j++)
             {
@@ -233,7 +257,7 @@ public class DogAgent : Unity.MLAgents.Agent
         }
         //print("sensor "+ sensor);
 
-        // 9 + 221 * 2 = 451
+        // 9 + (17 * 17)#289# * 2 = 587
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -343,5 +367,38 @@ public class DogAgent : Unity.MLAgents.Agent
         float localDistance = Vector3.Distance(body.position, Target);
         //Debug.Log("localdistance " + localDistance);
         return localDistance;
+    }
+
+    void OnDestroy()
+    {
+        if (createCSV)
+        {
+            Save();
+        }
+    }
+
+    private void Save()
+    {
+        string[][] output = new string[rowData.Count][];
+
+        for (int i = 0; i < output.Length; i++)
+        {
+            output[i] = rowData[i];
+        }
+
+        int length = output.GetLength(0);
+        string delimiter = ",";
+
+        StringBuilder sb = new StringBuilder();
+
+        for (int index = 0; index < length; index++)
+            sb.AppendLine(string.Join(delimiter, output[index]));
+
+
+        string filePath = "csvLimbData.csv";
+
+        StreamWriter outStream = System.IO.File.CreateText(filePath);
+        outStream.WriteLine(sb);
+        outStream.Close();
     }
 }
