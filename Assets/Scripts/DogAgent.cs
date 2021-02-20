@@ -10,6 +10,7 @@ public class DogAgent : Unity.MLAgents.Agent
 
     public float bodyRewardLoss;
     public Transform body;
+    public List<BodyScript> hitScripts;
     public Transform head;
     public List<Transform> LegParts;
     public List<float> startingAngles;
@@ -30,8 +31,11 @@ public class DogAgent : Unity.MLAgents.Agent
 
     void Start()
     {
-        body.GetComponent<BodyScript>().SetArenaAndReward(this, gameObject, bodyRewardLoss);
-        head.GetComponent<BodyScript>().SetArenaAndReward(this, gameObject, bodyRewardLoss);
+        //body.GetComponent<BodyScript>().SetArenaAndReward(this, gameObject, bodyRewardLoss);
+        foreach(BodyScript w in hitScripts)
+        {
+            w.SetArenaAndReward(this, gameObject, bodyRewardLoss);
+        }
 
         layerMask = 1 << 9;
         //layerMask = ~layerMask;
@@ -92,15 +96,17 @@ public class DogAgent : Unity.MLAgents.Agent
                 //float turnAmount = 0f;
 
                 //float turnTarget = Mathf.Clamp(actionBuffers.ContinuousActions[i], 0f, 1f);
-                float turnTarget = actionBuffers.ContinuousActions[i]*45f;
 
 
                 HingeJoint joint = LegParts[i].GetComponent<HingeJoint>();
+
+                float turnTarget = ((joint.limits.max + joint.limits.min) / 2f) + (actionBuffers.ContinuousActions[i] * (joint.limits.max - joint.limits.min)/2f);
+
                 float currentTurn = UnwrapAngle(getAngleFromJoint(joint) - startingAngles[i]);
 
                 //print(i + " " + LegParts[i].localRotation.eulerAngles.z + " " + startingAngles[i] + " " + UnwrapAngle(LegParts[i].localRotation.eulerAngles.z - startingAngles[i]) + " " + joint.limits.min + " " + joint.limits.max);
                 //print("local rotation "+LegParts[i].localRotation.eulerAngles);
-                //print(i+" rot " + getAngleFromJoint(joint) + " " + startingAngles[i] + " " + (getAngleFromJoint(joint)-startingAngles[i]));
+                print(i+" rot " + getAngleFromJoint(joint) + " " + startingAngles[i] + " " + (getAngleFromJoint(joint)-startingAngles[i]));
                 
                 //float currentTurn = (() - joint.limits.min) / (joint.limits.max - +joint.limits.min);
 
