@@ -209,12 +209,12 @@ public class DogAgent : Unity.MLAgents.Agent
         sensor.AddObservation(Mathf.Atan(localTarget.magnitude));
 
         RaycastHit hit;
-        for (int i = -14; i <= 2; i++)
+        for (int i = -14; i <= 4; i++)
         {
             for (int j = -8; j <= 8; j++)
             {
                 Vector3 p1 = body.position;
-                Vector3 pt = new Vector3(i * 0.25f, 1, j * 0.25f);
+                Vector3 pt = new Vector3(i * 0.25f, 0.25f, j * 0.25f);
                 pt = Quaternion.Euler(0, body.rotation.eulerAngles.y, 0) * pt;
                 
                 p1 = p1 + pt;
@@ -247,7 +247,7 @@ public class DogAgent : Unity.MLAgents.Agent
         }
         //print("sensor "+ sensor);
 
-        // 9 + (17 * 17)#289# * 2 = 587
+        // 9 + 2 * (19 * 17)  = 655
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
