@@ -254,7 +254,8 @@ MonoBehaviour:
   - 90
   - -115
   - 160
-  createCSV: 1
+  createCSV: 0
+  printAngles: 0
   raycastDistance: 2.5
 --- !u!114 &3501017765678730279
 MonoBehaviour:

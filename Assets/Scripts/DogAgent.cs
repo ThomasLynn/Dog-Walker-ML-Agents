@@ -16,6 +16,7 @@ public class DogAgent : Unity.MLAgents.Agent
     public List<Transform> LegParts;
     public List<float> startingAngles;
     public bool createCSV;
+    public bool printAngles;
 
     public float raycastDistance;
     private int layerMask;
@@ -34,7 +35,6 @@ public class DogAgent : Unity.MLAgents.Agent
     private List<string[]> rowData = new List<string[]>();
 
     private bool showDebug = false;
-    private bool printAngles = false;
 
     void Start()
     {
@@ -127,7 +127,7 @@ public class DogAgent : Unity.MLAgents.Agent
                 //print("local rotation "+LegParts[i].localRotation.eulerAngles);
                 if (printAngles)
                 {
-                    print(i + " rot " + getAngleFromJoint(joint) + " " + startingAngles[i] + " " + (getAngleFromJoint(joint) - startingAngles[i]));
+                    print(i + " rot " + getAngleFromJoint(joint) + " " + startingAngles[i] + " " + UnwrapAngle(getAngleFromJoint(joint) - startingAngles[i]));
                 }
                 if (createCSV)
                 {
