@@ -203,7 +203,7 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 5022602860645237092, guid: 192247220ea3e984cbdff5f8f727a4e6, type: 3}
+  m_Model: {fileID: 5022602860645237092, guid: 661d35b9466178e48978091d64de2fa0, type: 3}
   m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: Dog
@@ -254,7 +254,7 @@ MonoBehaviour:
   - 90
   - -115
   - 160
-  maxNoProgressSteps: 300
+  maxNoProgressSteps: 600
   createCSV: 0
   printAngles: 0
   raycastDistance: 3
