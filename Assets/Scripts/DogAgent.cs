@@ -203,14 +203,14 @@ public class DogAgent : Unity.MLAgents.Agent
         {
             x -= 360f;
         }
-        Debug.Log("x "+Mathf.Atan(x/10f));
+        //Debug.Log("x "+Mathf.Atan(x/10f));
         sensor.AddObservation(Mathf.Atan(x/10f));
         float z = body.rotation.eulerAngles.z - 90;
         if (z > 180f)
         {
             z -= 360;
         }
-        Debug.Log("z "+Mathf.Atan(z / 100f));
+        //Debug.Log("z "+Mathf.Atan(z / 100f));
         sensor.AddObservation(Mathf.Atan(z/100f));
         Vector3 start = body.position;
         Vector3 end = Vector3.MoveTowards(start, Target, 1f);
