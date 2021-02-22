@@ -194,7 +194,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 655
+    VectorObservationSize: 791
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 11
@@ -254,6 +254,7 @@ MonoBehaviour:
   - 90
   - -115
   - 160
+  maxNoProgressSteps: 300
   createCSV: 0
   printAngles: 0
   raycastDistance: 3

@@ -15,6 +15,7 @@ public class DogAgent : Unity.MLAgents.Agent
     public Transform head;
     public List<Transform> LegParts;
     public List<float> startingAngles;
+    public int maxNoProgressSteps;
     public bool createCSV;
     public bool printAngles;
 
@@ -26,6 +27,8 @@ public class DogAgent : Unity.MLAgents.Agent
     private GameObject CurrentDogBody;
 
     private float distance;
+    private float minDistance;
+    private int noProgressSteps;
     //private float height;
     //private int layerMask;
 
@@ -155,6 +158,12 @@ public class DogAgent : Unity.MLAgents.Agent
 
         float newDistance = GetDistance();
         //Debug.Log("distance " + NewDistance);
+        noProgressSteps++;
+        if(newDistance < minDistance)
+        {
+            minDistance = newDistance - 0.1f;
+            noProgressSteps = 0;
+        }
         //if (newDistance < distance)
         //{
         AddReward((distance - newDistance)*0.1f); // Scaled to keep the extrinsic value estimate below 1 (should soft-cap at about 0.5
@@ -166,6 +175,13 @@ public class DogAgent : Unity.MLAgents.Agent
         {
             checkpointNumber = checkpointNumber + 1;
             SetRandomTarget(false);
+        }
+        if (noProgressSteps > maxNoProgressSteps)
+        {
+            //print("no progress, ending");
+            AddReward(bodyRewardLoss);
+            EndEpisode();
+            GetParentArena().ResetEnv(gameObject);
         }
 
         /*if (StepCount >= 10)
@@ -209,7 +225,7 @@ public class DogAgent : Unity.MLAgents.Agent
         sensor.AddObservation(Mathf.Atan(localTarget.magnitude));
 
         RaycastHit hit;
-        for (int i = -14; i <= 4; i++)
+        for (int i = -18; i <= 4; i++)
         {
             for (int j = -8; j <= 8; j++)
             {
@@ -247,7 +263,7 @@ public class DogAgent : Unity.MLAgents.Agent
         }
         //print("sensor "+ sensor);
 
-        // 9 + 2 * (19 * 17)  = 655
+        // 9 + 2 * (23 * 17)  = 655
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -342,6 +358,8 @@ public class DogAgent : Unity.MLAgents.Agent
     {
         Target = LocalTarget;
         distance = GetDistance();
+        minDistance = distance;
+        noProgressSteps = 0;
         if (turn)
         {
             float angle = Mathf.Atan2(Target.x - transform.position.x, Target.z - transform.position.z) * Mathf.Rad2Deg;
