@@ -3,7 +3,6 @@ Library/*
 Assets/TextMesh Pro/*
 Assets/TextMesh Pro.meta
 Assets/ML-Agents/*
-Assets/Networks/*
 Trainer/results/*
 Logs/*
 Packages/*
