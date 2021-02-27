@@ -226,7 +226,7 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 3000
+  MaxStep: 30000
   bodyRewardLoss: -0.1
   body: {fileID: 4923257830720832094}
   head: {fileID: 5272993357980458289}
