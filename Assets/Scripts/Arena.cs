@@ -18,6 +18,10 @@ public class Arena : MonoBehaviour
 
     public void Start()
     {
+        if (Application.isEditor)
+        {
+            dogCount = 1;
+        }
         dogs = new List<GameObject>();
         layerMask = 1 << 8;
         layerMask = ~layerMask;
